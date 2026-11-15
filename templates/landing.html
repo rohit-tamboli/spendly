@@ -28,7 +28,7 @@
 
         <div class="lp-actions">
             <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
-            <a href="#" class="btn-primary">See how it works</a>
+            <a href="#" class="btn-primary" id="videoTrigger">See how it works</a>
         </div>
 
         <div class="lp-mock">
@@ -109,4 +109,53 @@
     </div>
 </section>
 
+<div class="lp-modal-overlay" id="videoModal">
+    <div class="lp-modal">
+        <button class="lp-modal-close" id="videoModalClose" aria-label="Close">&times;</button>
+        <div class="lp-modal-video">
+            <iframe id="videoFrame"
+                src=""
+                data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const modal    = document.getElementById('videoModal');
+    const frame    = document.getElementById('videoFrame');
+    const closeBtn = document.getElementById('videoModalClose');
+    const trigger  = document.getElementById('videoTrigger');
+
+    function openModal() {
+        frame.src = frame.dataset.src;
+        modal.classList.add('lp-modal-overlay--open');
+    }
+
+    function closeModal() {
+        frame.src = '';
+        modal.classList.remove('lp-modal-overlay--open');
+    }
+
+    trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        openModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+</script>
 {% endblock %}
